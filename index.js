@@ -1,26 +1,11 @@
-const sqlite3 = require("sqlite3").verbose()
+const express = require('express');
+const usersRouter = require("./routes/users.js")
 
-// Open the database connection
-const db = new sqlite3.Database("./users.db", (err) => {
-	if (err) {
-		console.error("Error opening database:", err.message)
-	} else {
-		console.log("Connected to the SQLite database.")
+const app = express();
+const port = 3000;
+app.use(express.json());
+app.use("/api/", usersRouter);
 
-		// Create the items table if it doesn't exist
-		db.run(
-			`CREATE TABLE IF NOT EXISTS users (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        firstName TEXT NOT NULL,
-        lastName TEXT NOT NULL
-      )`,
-			(err) => {
-				if (err) {
-					console.error("Error creating table:", err.message)
-				}
-			}
-		)
-	}
-})
-
-module.exports = db
+app.listen(port, () => {
+    console.log(`Serveur en cours d'exécution sur http://localhost:${port}`);
+});
